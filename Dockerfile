@@ -9,7 +9,7 @@ COPY pom.xml ./
 COPY src ./src
 
 # Build the Spring Boot application
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests=true
 
 # === Stage 2: Use lightweight Java 21 JRE to run the app ===
 FROM eclipse-temurin:21-jre-alpine
