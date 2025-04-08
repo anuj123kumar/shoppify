@@ -1,23 +1,27 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:21
-# Set the working directory in the container
+# === Stage 1: Build the application using Maven ===
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+
+# Set working directory
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y maven
-
-COPY pom.xml .
+# Copy Maven config and project files
+COPY pom.xml ./
 COPY src ./src
 
-RUN mvn package
+# Build the Spring Boot application
+RUN mvn clean package -DskipTests
 
-# Copy the generated JAR file into the container
-COPY target/shoppify-0.0.1-SNAPSHOT.jar /app/shoppify-0.0.1-SNAPSHOT.jar
+# === Stage 2: Use lightweight Java 21 JRE to run the app ===
+FROM eclipse-temurin:21-jre-alpine
 
-# Expose the port the application runs on
+# Set working directory
+WORKDIR /app
+
+# Copy the built JAR from the builder stage
+COPY --from=builder /app/target/*.jar app.jar
+
+# Expose the app port
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "shoppify-0.0.1-SNAPSHOT.jar"]
-
-
-
+ENTRYPOINT ["java", "-jar", "app.jar"]
