@@ -1,16 +1,14 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:21
-# Set the working directory in the container
-WORKDIR /app
+FROM eclipse-temurin:17 AS build
+WORKDIR /workspace/app
 
-# Copy the generated JAR file into the container
-COPY target/shoppify-0.0.1-SNAPSHOT.jar /app/shoppify-0.0.1-SNAPSHOT.jar
+RUN apt-get update && apt-get install -y maven
 
-# Expose the port the application runs on
-EXPOSE 8080
+COPY pom.xml .
+COPY src ./src
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "shoppify-0.0.1-SNAPSHOT.jar"]
+RUN mvn package -DskipTests
 
-
-
+FROM eclipse-temurin:17
+VOLUME /tmp
+COPY --from=build /workspace/app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
