@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  spring-app:
+    build: .
+    container_name: silly_lumiere
+    depends_on:
+      - postgres-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
