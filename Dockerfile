@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y maven
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn package -DskipTests
+RUN mvn package
 
 FROM eclipse-temurin:21
 VOLUME /tmp
