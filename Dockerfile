@@ -1,27 +1,30 @@
-# === Stage 1: Build the application using Maven ===
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+# Stage 1: Build with Maven
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-# Set working directory
+# Set work directory inside the container
 WORKDIR /app
 
-# Copy Maven config and project files
-COPY pom.xml ./
+# Copy pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy the source code
 COPY src ./src
 
-# Build the Spring Boot application
+# Package the application
 RUN mvn clean package -DskipTests
 
-# === Stage 2: Use lightweight Java 21 JRE to run the app ===
-FROM eclipse-temurin:21-jre-alpine
+# Stage 2: Run with Java 21 JDK
+FROM eclipse-temurin:21-jdk
 
 # Set working directory
 WORKDIR /app
 
-# Copy the built JAR from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
+# Copy the packaged JAR from the builder stage
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose the app port
+# Expose port (change as per your app config)
 EXPOSE 8080
 
-# Run the application
+# Command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
