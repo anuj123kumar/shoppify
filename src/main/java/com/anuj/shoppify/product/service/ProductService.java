@@ -7,22 +7,23 @@ import com.anuj.shoppify.product.entity.Product;
 import com.anuj.shoppify.product.entity.ProductCategory;
 import com.anuj.shoppify.product.repository.ProductCategoryRepository;
 import com.anuj.shoppify.product.repository.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
+
 
     public void addProduct(List<ProductDTO> productDTOS) {
         List<Product> products = productDTOS.stream().map(dto -> {
@@ -38,7 +39,7 @@ public class ProductService {
         }).toList();
 
         productRepository.saveAll(products);
-        ResponseEntity.ok("Products Added");
+        log.info("Products Added Successfully {}",products);
     }
 
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
@@ -74,6 +75,7 @@ public class ProductService {
     public void removeProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("No Product Found with id " + id));
         productRepository.delete(product);
+        log.info("Product Deleted Successfully");
     }
 
     public void updateProduct(long id, ProductDTO productDTO) {
@@ -81,7 +83,7 @@ public class ProductService {
         ProductCategory category = productCategoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
         BeanUtils.copyProperties(productDTO,product);
         productRepository.save(product);
-        ResponseEntity.ok("Product Updated");
+        log.info("Product Updated Successfully {} ", productDTO);
     }
 
     //categories crud operation
@@ -92,7 +94,7 @@ public class ProductService {
                 .name(productCategoryDTO.getName())
                 .build();
         productCategoryRepository.save(productCategory);
-        ResponseEntity.ok("Product Category Added");
+        log.info("Product Category Added {} ", productCategory);
     }
 
     public Page<ProductCategoryDTO> getCategories(Pageable pageable) {
@@ -116,12 +118,13 @@ public class ProductService {
         ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("No Product Category Found with id " + id));
         BeanUtils.copyProperties(productCategoryDTO,productCategory);
         productCategoryRepository.save(productCategory);
-        ResponseEntity.ok("Product Updated");
+        log.info("Product Category Updated {} ", productCategory);
     }
 
     public void removeCategory(Long id) {
         ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("No Product Category Found with id " + id));
         productCategoryRepository.delete(productCategory);
+        log.info("Product Category Deleted Successfully");
     }
 
 }
