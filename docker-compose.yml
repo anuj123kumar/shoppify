@@ -27,8 +27,6 @@ services:
     ports:
       - "8080:8080"
 
-
-
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
     environment:
@@ -61,4 +59,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
-    esdata:
+  pgdata:
+  esdata:
