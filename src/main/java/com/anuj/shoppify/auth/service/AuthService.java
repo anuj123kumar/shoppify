@@ -28,7 +28,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .build();
         userRepository.save(user);
-        log.info("SignIn Successful,{} ", user);
+        log.info("SignIn Successful  {} ", user);
     }
 
     public AuthResponse login(UserDTO userDTO) {
