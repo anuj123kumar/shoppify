@@ -4,12 +4,13 @@ import com.anuj.shoppify.auth.entity.User;
 import com.anuj.shoppify.auth.repository.UserRepository;
 import com.anuj.shoppify.auth.dto.UserDTO;
 import com.anuj.shoppify.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 public class AuthService {
     @Autowired
@@ -21,13 +22,13 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public AuthResponse createUser(UserDTO userDTO) {
+    public void createUser(UserDTO userDTO) {
         User user = User.builder()
                 .email(userDTO.getEmail())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .build();
         userRepository.save(user);
-        return new AuthResponse(true,"SignIn Successful",null);
+        log.info("SignIn Successful,{} ", user);
     }
 
     public AuthResponse login(UserDTO userDTO) {

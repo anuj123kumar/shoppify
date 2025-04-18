@@ -19,8 +19,8 @@ public class AuthController {
 
     @PostMapping("/signIn")
     public ResponseEntity<AuthResponse> createUser(@RequestBody @Valid UserDTO userDTO) {
-        AuthResponse response =  authService.createUser(userDTO);
-        return ResponseEntity.ok(response);
+        authService.createUser(userDTO);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
