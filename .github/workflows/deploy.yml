@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t stockmeds/centurion-core:latest .
-          docker push stockmeds/centurion-core:latest
+          docker build -t postgres/postgres:latest .
+          docker push postgres/postgres:latest
 
   deploy:
     needs: build
