@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t postgres/postgres:latest .
-          docker push postgres/postgres:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/postgres:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/postgres:latest
 
   deploy:
     needs: build
