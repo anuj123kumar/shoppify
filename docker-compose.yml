@@ -38,5 +38,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - spring-app
+
+
 volumes:
   pgdata:
