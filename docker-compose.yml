@@ -4,7 +4,7 @@ services:
   spring-app:
     build:
       context: .
-    image: chatbot/ragify:latest
+    image: anuj0010/ragify:latest
     container_name: ragify
     depends_on:
       - postgres-db
