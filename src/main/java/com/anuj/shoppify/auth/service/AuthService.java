@@ -31,16 +31,16 @@ public class AuthService {
         log.info("SignIn Successful,{} ", user);
     }
 
-    public AuthResponse login(UserDTO userDTO) {
+    public void login(UserDTO userDTO) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword())
             );
 
             String token = jwtUtil.generateToken(userDTO.getEmail());
-            return new AuthResponse(true, "Login successful", token);
+            log.info("login Successful");
         } catch (Exception e) {
-            return new AuthResponse(false, "Invalid email or password", null);
+            log.error("Invalid email or password");
         }
     }
 }
