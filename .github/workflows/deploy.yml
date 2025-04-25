@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t chatbot/ragify:latest .
-          docker push chatbot/ragify:latest
+          docker build -t anuj0010/ragify:latest .
+          docker push anuj0010/ragify:latest
 
   deploy:
     needs: build
