@@ -38,7 +38,7 @@ public class AuthService {
             );
 
             String token = jwtUtil.generateToken(userDTO.getEmail());
-            log.info("login Successful");
+            log.info("login Successful!");
         } catch (Exception e) {
             log.error("Invalid email or password");
         }
