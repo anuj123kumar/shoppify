@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/postgres:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/postgres:latest
+          docker build -t chatbot/ragify:latest .
+          docker push chatbot/ragify:latest
 
   deploy:
     needs: build
