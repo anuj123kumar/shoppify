@@ -65,15 +65,12 @@ jobs:
             # Pull the latest image (failsafe)
             docker compose pull || { echo "Failed to pull image"; exit 1; }
             
+            #stop running container
+            docker compose down
+            
+            #delete exiting container with same name
             docker ps -a --format '{{.Names}}' | grep -q postgres_container && docker rm -f postgres_container || echo "✅ No conflicting postgres_container"
             
-            PORT_IN_USE=$(lsof -ti :8080)
-            if [ ! -z "$PORT_IN_USE" ]; then
-            echo "⚠️ Port 8080 is in use. Killing process $PORT_IN_USE..."
-            kill -9 $PORT_IN_USE
-            fi
-  
-  
             # Start new containers before stopping old ones (zero downtime)
             docker compose up -d
 
