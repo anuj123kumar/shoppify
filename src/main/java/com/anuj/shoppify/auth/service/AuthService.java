@@ -40,7 +40,8 @@ public class AuthService {
             String token = jwtUtil.generateToken(userDTO.getEmail());
             log.info("login Successful!");
         } catch (Exception e) {
-            log.error("Invalid email or password, please enter correct info");
+            log.error("Invalid Invalid credentials, please enter correct info");
+            throw new RuntimeException("Invalid credentials");
         }
     }
 }
